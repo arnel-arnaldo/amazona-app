@@ -38,7 +38,6 @@ footer {
   background-color: #203040;
   color: #ffffff;
 }
-
 /* Common */
 h1 {
   font-size: 1.8rem;
@@ -48,6 +47,7 @@ h2 {
   font-size: 1.6rem;
   padding: 1rem 0;
 }
+
 a {
   text-decoration: none;
 }
@@ -90,7 +90,6 @@ button.primary {
 button.block {
   width: 100%;
 }
-
 /* Header */
 header a {
   color: #ffffff;
@@ -163,7 +162,6 @@ img.large {
 .price {
   font-size: 2rem;
 }
-
 /* Rating */
 .rating span {
   color: #f0c040;
@@ -172,7 +170,6 @@ img.large {
 .rating span:last-child {
   color: #404040;
 }
-
 /* Alert */
 .success {
   color: #20a020;
@@ -191,5 +188,19 @@ img.large {
 }
 .alert-danger {
   color: #a02020;
-  background-color: #ffe0e0e0;
+  background-color: #ffe0e0;
+}
+/* Form */
+.form {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+.form > div {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+.form label {
+  margin: 1rem 0;
+  display: block;
 }
