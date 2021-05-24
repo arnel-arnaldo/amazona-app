@@ -11,7 +11,7 @@ export default function ProductListScreen(props) {
     const { loading, error, products } = productList;
 
     // Access productCreate from redux store
-    const productCreate = useSelector((state) => state.productCreate)
+    const productCreate = useSelector((state) => state.productCreate);
     const {
         loading: loadingCreate,
         error: errorCreate,
@@ -26,7 +26,7 @@ export default function ProductListScreen(props) {
             dispatch({type: PRODUCT_CREATE_RESET});
             props.history.push(`/product/${createdProduct._id}/edit`);
         }
-        dispatch(listProducts);
+        dispatch(listProducts());
     },[createdProduct, dispatch, props.history, successCreate]);
 
     const deleteHandler = () => {
@@ -47,9 +47,10 @@ export default function ProductListScreen(props) {
             </div>
             {loadingCreate && <LoadingBox></LoadingBox>}
             {errorCreate && <MessageBox variant="danger">{errorCreate}</MessageBox>}
-            {loading ? <LoadingBox></LoadingBox> 
-                : error ? <MessageBox variant="danger">{error}</MessageBox> :
-                <table className="table">
+            {loading ? (<LoadingBox></LoadingBox> )
+                : error ? (<MessageBox variant="danger">{error}</MessageBox>) 
+                : (
+                    <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -84,8 +85,8 @@ export default function ProductListScreen(props) {
                         ))}
                     </tbody>
                 </table>
+                )
             }
-
         </div>
-    )
-}
+    );
+};

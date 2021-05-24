@@ -10,9 +10,9 @@ const data = {
         },
         {
             name: 'Hazel',
-            email: 'arnaldohazel@arnold-hayes.com',
+            email: 'hazelarnaldo@arnold-hayes.com',
             password: bcrypt.hashSync('1234', 8),
-            isAdmin: false,
+            isAdmin: true,
         }
     ],
     products: [
