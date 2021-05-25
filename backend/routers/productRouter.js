@@ -46,6 +46,7 @@ productRouter.post('/', isAuth, isAdmin, expressAsyncHandler(async(req, res) => 
     res.send({ message: 'Product Created', product: createdProduct });
 }));
 
+// create API to edit (PUT) a product
 productRouter.put('/:id', isAuth, isAdmin, expressAsyncHandler(async(req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
@@ -59,6 +60,17 @@ productRouter.put('/:id', isAuth, isAdmin, expressAsyncHandler(async(req, res) =
         product.description = req.body.description;
         const updatedProduct = await product.save();
         res.send({ message: 'Product Updated', product: updatedProduct });
+    } else {
+        res.status(404).send({ message: 'Product Not Found' });
+    }
+}));
+
+// create API to delete a product
+productRouter.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async(req, res) => {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+        const deleteProduct = await product.remove();
+        res.send({ message: 'Product Deleted', product: deleteProduct });
     } else {
         res.status(404).send({ message: 'Product Not Found' });
     }
