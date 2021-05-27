@@ -88,13 +88,28 @@ userRouter.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) 
     if (user) {
         // if (user.email === 'admin@example.com'){
             if (user.isAdmin){
-            res.status(400).send({ message: 'Cannot Delete Admin User' });
+                res.status(400).send({ message: 'Cannot Delete Admin User' });
             return
         }
         const deleteUser = await user.remove();
         res.send({ message: 'User Deleted', user: deleteUser });
     } else {
         res.status(404).send({ message: 'User Not Found '});
+    }
+}));
+
+// Create API to update user
+userRouter.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.isSeller = req.body.isSeller || user.isSeller;
+        user.isAdmin = req.body.isAdmin || user.isAdmin;
+        const updatedUser = await user.save();
+        res.send({ message: 'User Updated', user: updatedUser });
+    } else {
+        res.status(404).send({ message: 'User Not Found'});
     }
 }));
 
