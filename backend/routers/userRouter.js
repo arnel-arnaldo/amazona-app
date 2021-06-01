@@ -7,13 +7,22 @@ import { generateToken, isAdmin, isAuth } from '../utils.js';
 
 const userRouter = express.Router();
 
+// Create API to return list of top-sellers (route: /api/users/topsellers)
+userRouter.get('/top-sellers', expressAsyncHandler(async (req, res) => {
+    const topSellers = await User.find({ isSeller: true}) // find users who are sellers
+        .sort({ 'seller.rating':-1})                      // sort in descending order
+        .limit(5);                                        // list first 3
+    res.send(topSellers);
+}));
+
+// Create API to put dummy data to MongoDB (route: /api/users/seed)
 userRouter.get('/seed', expressAsyncHandler(async(req, res) => {
     // await User.remove({});
     const createdUsers = await User.insertMany(data.users);
     res.send({ createdUsers });
 }));
 
-// Create API for user sign-in
+// Create API for user sign-in (route: /api/users/signin)
 userRouter.post('/signin', expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({email: req.body.email});
     // Check if email entered is valid
@@ -34,7 +43,7 @@ userRouter.post('/signin', expressAsyncHandler(async (req, res) => {
     res.status(401).send({ message: 'Invalid email or password' });
 }));
 
-// Create API for new user register
+// Create API for new user register (route: /api/users/register)
 userRouter.post('/register', expressAsyncHandler(async(req, res) => {
     const user = new User({
         name: req.body.name,
@@ -52,6 +61,7 @@ userRouter.post('/register', expressAsyncHandler(async(req, res) => {
     });
 }));
 
+// Create API to get user (route: /api/users/<:id>)
 userRouter.get('/:id', expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
@@ -61,7 +71,7 @@ userRouter.get('/:id', expressAsyncHandler(async (req, res) => {
     }
 }));
 
-// Create API to update user profile
+// Create API to update user profile (route: /api/users/profile)
 userRouter.put('/profile', isAuth, expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
@@ -87,13 +97,13 @@ userRouter.put('/profile', isAuth, expressAsyncHandler(async (req, res) => {
     }
 }));
 
-// Create API to list all users
+// Create API to list all users (route: /api/users/)
 userRouter.get('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     const users = await User.find({}); // get all users from database
     res.send(users);
 }));
 
-// Create API to delete user
+// Create API to delete user (route: /api/users/<:id>)
 userRouter.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
@@ -109,7 +119,7 @@ userRouter.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) 
     }
 }));
 
-// Create API to update user
+// Create API to update user (route: /api/users/<:id>)
 userRouter.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {

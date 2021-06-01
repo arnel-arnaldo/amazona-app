@@ -2,22 +2,34 @@ import axios from "axios";
 import { CART_ADD_ITEM,
          CART_REMOVE_ITEM,
          CART_SAVE_PAYMENT_METHOD,
-         CART_SAVE_SHIPPING_ADDRESS } from "../constants/cartConstants";
+         CART_SAVE_SHIPPING_ADDRESS,
+         CART_ADD_ITEM_FAIL } from "../constants/cartConstants";
 
+// API to add products to cart
 export const addToCart = (productId, qty) => async(dispatch, getState) => {
     const {data} = await axios.get(`/api/products/${productId}`);
-    dispatch({
-        type: CART_ADD_ITEM,
-        payload: {
-            name: data.name,
-            image: data.image,
-            price: data.price,
-            countInStock: data.countInStock,
-            product: data._id,
-            seller: data.seller,
-            qty,
-        },
-    });
+    // The next code snippets check if the next added product is from
+    // the same seller as previous product in the cart
+    const {cart: { cartItems }} = getState();
+    if (cartItems.length > 0 && data.seller._id !== cartItems[0].seller._id){
+        dispatch({
+            type: CART_ADD_ITEM_FAIL,
+            payload: `Cannot Add to Cart. Please buy only from ${cartItems[0].seller.seller.name} for this current order.`
+        });
+    } else {
+        dispatch({
+            type: CART_ADD_ITEM,
+            payload: {
+                name: data.name,
+                image: data.image,
+                price: data.price,
+                countInStock: data.countInStock,
+                product: data._id,
+                seller: data.seller,
+                qty,
+            },
+        });
+    }
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
 };
 

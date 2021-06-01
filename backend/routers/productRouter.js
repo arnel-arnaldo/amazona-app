@@ -6,15 +6,25 @@ import { isAuth, isAdmin, isSellerOrAdmin } from '../utils.js';
 
 const productRouter = express.Router();
 
-// create API to get (GET) list of data to frontend
+// create API to get (GET) list of products to frontend
 productRouter.get('/', expressAsyncHandler(async (req, res) => {
+    const name = req.query.name || '';
+    const category = req.query.category || '';
     const seller = req.query.seller || '';
+    const nameFilter = name ? { name: { $regex: name, $options: 'i' } } : {};
     const sellerFilter = seller ? { seller } : {};
-    const products = await Product.find({...sellerFilter}).populate(
+    const categoryFilter = category ? { category } : {};
+    const products = await Product.find({...sellerFilter, ...nameFilter, ...categoryFilter}).populate(
         'seller',
         'seller.name seller.logo'
     );
     res.send(products);
+}));
+
+// create API to get product categories
+productRouter.get('/categories', expressAsyncHandler(async (req, res) => {
+    const categories = await Product.find().distinct('category');
+    res.send(categories);
 }));
 
 productRouter.get('/seed', expressAsyncHandler(async (req, res) => {
