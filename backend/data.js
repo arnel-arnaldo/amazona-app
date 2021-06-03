@@ -3,16 +3,31 @@ import bcrypt from 'bcryptjs';
 const data = {
     users: [
         {
-            name: 'Arnel',
+            name: 'Arnel Arnaldo',
             email: 'arnelarnaldo@arnold-hayes.com',
             password: bcrypt.hashSync('1234', 8),
             isAdmin: true,
+            isSeller: true,
+            seller: {
+                name: "Arnold-Hayes",
+                logo: '/images/logoexample.jpg',
+                description: "Arnold-Hayes Business Enterprise",
+                rating: 4.0,
+                numReviews: 120
+            }
         },
         {
-            name: 'Hazel',
+            name: 'Hazel Arnaldo',
             email: 'hazelarnaldo@arnold-hayes.com',
             password: bcrypt.hashSync('1234', 8),
             isAdmin: true,
+            seller: {
+                name: "Arnold-Hayes",
+                logo: '/images/logoexample.jpg',
+                description: "Arnold-Hayes Business Enterprise",
+                rating: 5.0,
+                numReviews: 120
+            }
         }
     ],
     products: [
