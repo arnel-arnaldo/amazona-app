@@ -21,7 +21,8 @@ import { PRODUCT_CREATE_FAIL,
          PRODUCT_REVIEW_CREATE_SUCCESS,
          PRODUCT_REVIEW_CREATE_FAIL} from "../constants/productConstants";
 
-export const listProducts = ({ seller = '',
+export const listProducts = ({ pageNumber = '',
+                                seller = '',
                                 name = '',
                                 category = '',
                                 order = '',
@@ -34,7 +35,7 @@ export const listProducts = ({ seller = '',
     });
     try {
         const { data } = await axios.get(
-            `/api/products?seller=${seller}&name=${name}&category=${category}&min=${min}&max=${max}&rating=${rating}&order=${order}`);
+            `/api/products?pageNumber=${pageNumber}&seller=${seller}&name=${name}&category=${category}&min=${min}&max=${max}&rating=${rating}&order=${order}`);
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });        
     } catch (error) {
         dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message});
